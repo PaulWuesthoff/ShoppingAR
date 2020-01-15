@@ -7,7 +7,7 @@ using System;
 using TMPro; // Add the TextMesh Pro namespace to access the various functions.
 
 
-[AddComponentMenu("System/QRScanner")]
+[AddComponentMenu("System/QRScanner")] 
 public class QRScanner : MonoBehaviour
 {
 
@@ -16,6 +16,8 @@ public class QRScanner : MonoBehaviour
 
     //Output of barcode data
     public TextMeshProUGUI textUI;
+ 
+
 
     void Start()
     {
@@ -37,7 +39,6 @@ public class QRScanner : MonoBehaviour
         //Repeat Scan every repeatRate
         InvokeRepeating("Decode", 1.5f, 1.5f);
     }
-
     private IEnumerator InitializeCamera()
     {
         // Waiting a little seem to avoid the Vuforia's crashes.
@@ -83,11 +84,13 @@ public class QRScanner : MonoBehaviour
 #if UNITY_EDITOR
                 RGBLuminanceSource imgSource = new RGBLuminanceSource(cameraFeed.Pixels, cameraFeed.BufferWidth, cameraFeed.BufferHeight, RGBLuminanceSource.BitmapFormat.Gray8);
                 var data = barCodeReader.Decode(imgSource);
+              
 
 #elif UNITY_ANDROID || UNITY_IOS
                 RGBLuminanceSource imgSource = new RGBLuminanceSource(cameraFeed.Pixels, cameraFeed.BufferWidth, cameraFeed.BufferHeight, RGBLuminanceSource.BitmapFormat.Gray8);
                 var data = barCodeReader.Decode(imgSource);
 #endif
+                
 
                 if (data != null)
                 {

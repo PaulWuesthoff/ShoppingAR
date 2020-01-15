@@ -30,7 +30,7 @@ public class UIManager : MonoBehaviour
     //enable/disable flash
     public void ToggleFlashButton()
     {
-        Button button = GameObject.Find("FlashIcon").GetComponent<Button>();
+        Button button = GameObject.Find("FlashIconButton").GetComponent<Button>();
 
         if (button.colors.selectedColor.Equals(Color.white))
         {

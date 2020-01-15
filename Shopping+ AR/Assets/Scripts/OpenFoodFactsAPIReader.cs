@@ -4,28 +4,33 @@ using UnityEngine;
 using SimpleJSON;
 using UnityEngine.Networking;
 using TMPro;
+using OpenFoodFactsAPIData;
 
 public class OpenFoodFactsAPIReader : MonoBehaviour
 {
     //Barcode of Product
     public TextMeshProUGUI barcode;
-
+    //Json Gui output on screen
     public TextMeshProUGUI productAPIData;
+
     private string productJson;
 
     public ProductDataClass productObject;
     private bool jsonIsDone = false;
 
+    public QRScanner QRScanner;
+
+    private String productName; 
     public void GetJsonData()
     {
-        barcode.text = "20005733";  //hardcoded product barcode
+        barcode.text = productName;  //hardcoded product barcode
         StartCoroutine(RequestWebService());
     }
 
     IEnumerator RequestWebService()
     {
-        string getDataUrl = "https://world-de.openfoodfacts.org/api/v0/product/" +barcode.text +".json";
-        print(getDataUrl);
+        string getDataUrl = "https://world-de.openfoodfacts.org/api/v0/product/" + QRScanner.textUI.text + ".json";
+        Debug.Log(getDataUrl);
 
         using (UnityWebRequest webData = UnityWebRequest.Get(getDataUrl))
         {
@@ -67,17 +72,20 @@ public class OpenFoodFactsAPIReader : MonoBehaviour
         if (jsonIsDone)
         {
             //convert json string to class
-            productObject = JsonUtility.FromJson<ProductDataClass>(productJson);
+            productObject = ProductDataClass.FromJson(productJson);
+            String name = productObject.Product.ProductName;
+            print(name);
 
             if (productObject != null)
             {
                 try
                 {
-                    Debug.Log("" + productObject.Product.NutritionGrades + " " + productObject.Product.GenericName);
+                   
+                    Debug.Log("Hier: " + productObject.Product.ProductName + " " + productObject.Product.Brands);
                 }
                 catch (NullReferenceException ex)
                 {
-                    Debug.Log("NullRefrenceExeption" +ex.ToString());
+                    Debug.Log("NullRefrenceExeption" + ex.ToString());
                 }
             }
             else
@@ -86,7 +94,7 @@ public class OpenFoodFactsAPIReader : MonoBehaviour
             }
             jsonIsDone = false;
         }
-        
+
     }
 
 }
